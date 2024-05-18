@@ -234,10 +234,16 @@ const betWinGo = async (req, res) => {
     }
 
     let userInfo = user[0];
+<<<<<<< HEAD
      let period = winGoNow[0]?.period ?? "";
     let fee = (x * money) * 0.02;
     let bonus = (x * money) * 0.02;
     let total = (x * money) - bonus;
+=======
+    let period = winGoNow[0]?.period ?? "";
+    let fee = (x * money) * 0.02;
+    let total = (x * money) - fee;
+>>>>>>> dbdad4afd04d64d863e4ada2d705c6a193972eb8
     let timeNow = Date.now();
     let check = userInfo.money - total;
 
@@ -350,7 +356,11 @@ const betWinGo = async (req, res) => {
         today = ?,
         time = ?`;
         await connection.execute(sql, [id_product, userInfo.phone, userInfo.code, userInfo.invite, period, userInfo.level, total, x, fee, 0, gameJoin, join, 0, checkTime, timeNow]);
+<<<<<<< HEAD
         await connection.execute('UPDATE `users` SET `money` = `money` - ?, `bonus` = `bonus` - ? WHERE `token` = ? ', [ Number(total), Number(bonus), auth]);
+=======
+        await connection.execute('UPDATE `users` SET `money` = `money` - ?, `bonus` = `bonus` - ? WHERE `token` = ? ', [ Number(total), Number(fee), auth]);
+>>>>>>> dbdad4afd04d64d863e4ada2d705c6a193972eb8
         const [users] = await connection.query('SELECT `money`, `level` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
         await rosesPlus(auth, money * x);
         // const [level] = await connection.query('SELECT * FROM level ');
@@ -528,7 +538,7 @@ const addWinGo = async (game) => {
 
         const [winGoNow] = await connection.query(`SELECT period FROM wingo WHERE status = 0 AND game = "${join}" ORDER BY id DESC LIMIT 1 `);
         const [setting] = await connection.query('SELECT * FROM `admin` ');
-        let period = winGoNow[0].period; 
+        let period = winGoNow[0]?.period ?? ""
         let amount = Math.floor(Math.random() * 10);
         const [minPlayers] = await connection.query(`SELECT * FROM minutes_1 WHERE status = 0 AND game = "${join}"`);
         if (minPlayers.length >= 2) {
