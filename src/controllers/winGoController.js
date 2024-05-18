@@ -63,7 +63,7 @@ const rosesPlus = async (auth, money) => {
     let userInfo = user[0];
     const [f1] = await connection.query('SELECT `phone`, `code`, `invite`, `rank`, `user_level`, `total_money` FROM users WHERE code = ? AND veri = 1 LIMIT 1 ', [userInfo.invite]);
 
-    if (userInfo.total_money >= 100) {b
+    if (userInfo.total_money >= 100) {
         if (f1.length > 0) {
             let infoF1 = f1[0];
             for (let levelIndex = 1; levelIndex <= 6; levelIndex++) {
@@ -234,9 +234,10 @@ const betWinGo = async (req, res) => {
     }
 
     let userInfo = user[0];
-    let period = winGoNow[0].period;
-    let fee = (x * money) * 0.01;
-    let total = (x * money) - fee;
+     let period = winGoNow[0]?.period ?? "";
+    let fee = (x * money) * 0.02;
+    let bonus = (x * money) * 0.02;
+    let total = (x * money) - bonus;
     let timeNow = Date.now();
     let check = userInfo.money - total;
 
@@ -349,8 +350,7 @@ const betWinGo = async (req, res) => {
         today = ?,
         time = ?`;
         await connection.execute(sql, [id_product, userInfo.phone, userInfo.code, userInfo.invite, period, userInfo.level, total, x, fee, 0, gameJoin, join, 0, checkTime, timeNow]);
-        await connection.execute('UPDATE `users` SET `money` = `money` - ? WHERE `token` = ? ', [ total-fee, auth]);
-         await connection.execute('UPDATE `users` SET `bonus` = `bonus` - ? WHERE `token` = ? ', [ fee, auth]);
+        await connection.execute('UPDATE `users` SET `money` = `money` - ?, `bonus` = `bonus` - ? WHERE `token` = ? ', [ Number(total), Number(bonus), auth]);
         const [users] = await connection.query('SELECT `money`, `level` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
         await rosesPlus(auth, money * x);
         // const [level] = await connection.query('SELECT * FROM level ');
@@ -377,6 +377,7 @@ const betWinGo = async (req, res) => {
             data: result,
             change: users[0].level,
             money: users[0].money,
+            bonus: users[0]
         });
     } else {
         return res.status(200).json({
@@ -527,7 +528,7 @@ const addWinGo = async (game) => {
 
         const [winGoNow] = await connection.query(`SELECT period FROM wingo WHERE status = 0 AND game = "${join}" ORDER BY id DESC LIMIT 1 `);
         const [setting] = await connection.query('SELECT * FROM `admin` ');
-        let period = winGoNow[0].period; // cầu hiện tại
+        let period = winGoNow[0].period; 
         let amount = Math.floor(Math.random() * 10);
         const [minPlayers] = await connection.query(`SELECT * FROM minutes_1 WHERE status = 0 AND game = "${join}"`);
         if (minPlayers.length >= 2) {
