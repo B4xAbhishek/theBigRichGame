@@ -325,7 +325,7 @@ const add5D = async(game) => {
         let timeNow = Date.now();
         let [k5D] = await connection.query(`SELECT period FROM 5d WHERE status = 0 AND game = ${game} ORDER BY id DESC LIMIT 1 `);
         const [setting] = await connection.query('SELECT * FROM `admin` ');
-        let period = k5D[0].period;
+        let period = k5D[0]?.period ?? "";
 
         let nextResult = '';
         if (game == 1) nextResult = setting[0].k5d;
