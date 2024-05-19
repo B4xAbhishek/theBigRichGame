@@ -148,9 +148,10 @@ const register = async (req, res) => {
             } else {
                ctv = check_i[0].ctv
             }
-            const sql = "INSERT INTO users SET id_user = ?,phone = ?,name_user = ?,password = ?, plain_password = ?, money = ?,code = ?,invite = ?,ctv = ?,veri = ?,otp = ?,ip_address = ?,status = ?,time = ?"
+            const sql = "INSERT INTO users SET id_user = ?,phone = ?,name_user = ?,password = ?, plain_password = ?, bonus = ?,code = ?,invite = ?,ctv = ?,veri = ?,otp = ?,ip_address = ?,status = ?,time = ?"
             await connection.execute(sql, [id_user, username, name_user, md5(pwd), pwd, process.env.SIGNUP_BONUS, code, invitecode, ctv, 1, otp2, ip, 1, time])
             await connection.execute("INSERT INTO point_list SET phone = ?", [username])
+            await connection.execute("UPDATE users SET bonus = bonus + ? WHERE code = ?", [process.env.BONUS_AMOUNT, invitecode]);
 
             let [check_code] = await connection.query("SELECT * FROM users WHERE invite = ? ", [invitecode])
 
@@ -177,7 +178,7 @@ const register = async (req, res) => {
             //    })
             // }
          } else {
-            const sql = "INSERT INTO users SET id_user = ?,phone = ?,name_user = ?,password = ?, plain_password = ?, money = ?,code = ?,veri = ?,otp = ?,ip_address = ?,status = ?,time = ?"
+            const sql = "INSERT INTO users SET id_user = ?,phone = ?,name_user = ?,password = ?, plain_password = ?, bonus = ?,code = ?,veri = ?,otp = ?,ip_address = ?,status = ?,time = ?"
             await connection.execute(sql, [id_user, username, name_user, md5(pwd), pwd, process.env.SIGNUP_BONUS, code, 1, otp2, ip, 1, time])
             await connection.execute("INSERT INTO point_list SET phone = ?", [username])
 
