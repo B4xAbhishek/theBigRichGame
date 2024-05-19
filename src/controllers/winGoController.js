@@ -225,7 +225,7 @@ const betWinGo = async (req, res) => {
     if (typeid == 5) gameJoin = 'wingo5';
     if (typeid == 10) gameJoin = 'wingo10';
     const [winGoNow] = await connection.query(`SELECT period FROM wingo WHERE status = 0 AND game = '${gameJoin}' ORDER BY id DESC LIMIT 1 `);
-    const [user] = await connection.query('SELECT `phone`, `code`, `invite`, `level`, `money` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
+    const [user] = await connection.query('SELECT `phone`, `code`, `invite`, `level`, `money`, `bonus` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
     if (!winGoNow[0] || !user[0] || !isNumber(x) || !isNumber(money)) {
         return res.status(200).json({
             message: 'Error!',
@@ -342,6 +342,7 @@ const betWinGo = async (req, res) => {
         level = ?,
         money = ?,
         amount = ?,
+        bonus = ?,
         fee = ?,
         get = ?,
         game = ?,
@@ -349,9 +350,13 @@ const betWinGo = async (req, res) => {
         status = ?,
         today = ?,
         time = ?`;
-        await connection.execute(sql, [id_product, userInfo.phone, userInfo.code, userInfo.invite, period, userInfo.level, total, x, fee, 0, gameJoin, join, 0, checkTime, timeNow]);
-        await connection.execute('UPDATE `users` SET `money` = `money` - ?, `bonus` = `bonus` - ? WHERE `token` = ? ', [ Number(total), Number(bonus), auth]);
-        const [users] = await connection.query('SELECT `money`, `level` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
+        await connection.execute(sql, [id_product, userInfo.phone, userInfo.code, userInfo.invite, period, userInfo.level, total, x, bonus, fee, 0, gameJoin, join, 0, checkTime, timeNow]);
+        if(Number(bonus) > 2){
+             await connection.execute('UPDATE `users` SET `money` = `money` - ?, `bonus` = `bonus` - ? WHERE `token` = ? ', [ Number(total), Number(bonus), auth]);
+        }else{
+             await connection.execute('UPDATE `users` SET `money` = `money` - ? WHERE `token` = ? ', [ (x * money), auth]);
+        }
+        const [users] = await connection.query('SELECT `money`, `level`, `bonus` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
         await rosesPlus(auth, money * x);
         // const [level] = await connection.query('SELECT * FROM level ');
         // let level0 = level[0];
@@ -377,7 +382,7 @@ const betWinGo = async (req, res) => {
             data: result,
             change: users[0].level,
             money: users[0].money,
-            bonus: users[0]
+            bonus: Number(users[0].bonus)
         });
     } else {
         return res.status(200).json({
