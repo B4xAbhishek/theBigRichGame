@@ -139,7 +139,7 @@ socket.on("data-server", function (msg) {
                unsetCookie()
                return false
             }
-            $(".num span").text(`₹ ${data.data.money_user}.00 `)
+            $(".num span").text(`₹ ${data.data.money_user} `)
             $(".bonus span").text(`₹ ${data.data.bonus_user} `)
          })
       $(".Loading").fadeOut(0)
@@ -189,7 +189,7 @@ fetch("/api/webapi/GetUserInfo")
          unsetCookie()
          return false
       }
-      $(".num span").text(`₹ ${data.data.money_user}.00 `)
+      $(".num span").text(`₹ ${data.data.money_user} `)
        $(".bonus span").text(`₹ ${data.data.bonus_user} `)
    })
 
@@ -640,8 +640,8 @@ $(".foot .right").click(function (e) {
          alertMessJoin(response.message)
          if (response.status === false) return
          $("#history-order").prepend(response.data)
-         $(".total-box .num span").text("₹ " + response.money + ".00")
-         $(".total-box .bonus span").text("₹ " + response.bonus + ".00")
+         $(".total-box .num span").text("₹ " + response.money + "")
+         $(".total-box .bonus span").text("₹ " + response.bonus + "")
          socket.emit("data-server_2", { money: x * money, join, time: Date.now(), change: response.change })
       },
    })
@@ -949,7 +949,7 @@ function showListOrder2(list_orders, x) {
                                     </div>
                                     <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                         <div data-v-a9660e98="">Amount Spent</div>
-                                        <div data-v-a9660e98="">${list_orders.money + list_orders.fee}.00</div>
+                                        <div data-v-a9660e98="">${parseFloat(list_orders.money) + parseFloat(list_orders.fee)}</div>
                                     </div>
                                     <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                         <div data-v-a9660e98="">Quantity</div>
@@ -957,11 +957,11 @@ function showListOrder2(list_orders, x) {
                                     </div>
                                     <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                         <div data-v-a9660e98="">Net Amount</div>
-                                        <div data-v-a9660e98="" class="red">${list_orders.money}.00</div>
+                                        <div data-v-a9660e98="" class="red">${list_orders.money}</div>
                                     </div>
                                     <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                         <div data-v-a9660e98="">Tax</div>
-                                        <div data-v-a9660e98="">${list_orders.fee}.00</div>
+                                        <div data-v-a9660e98="">${list_orders.fee}</div>
                                     </div>
                                     <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                         <div data-v-a9660e98="">Opening Price</div>

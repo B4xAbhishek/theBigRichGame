@@ -286,8 +286,8 @@ function reload_money() {
             unsetCookie()
             return false
          }
-         $(".num span").text(`₹ ${data.data.money_user}.00 `)
-         $(".num_bonus span").text(`₹ ${data.data.bonus_user}.00 `)
+         $(".num span").text(`₹ ${data.data.money_user} `)
+         $(".num_bonus span").text(`₹ ${data.data.bonus_user} `)
          $(".Loading").fadeOut(0)
       })
 }
@@ -415,7 +415,7 @@ function result() {
    if (result <= 0) {
       result = 1000
    }
-   $("#total").html(result + ".00")
+   $("#total").html(result + "")
 }
 
 $(".van-overlay, .canned-alert").click(function (e) {
@@ -585,7 +585,7 @@ $(".foot .right").click(function (e) {
             $(".foot .right").removeClass("block-click")
          }, 500)
          if (response.status == true) {
-            $("#money_show").text("₹ " + response.money + ".00")
+            $("#money_show").text("₹ " + response.money + "")
             showMeJoin()
          }
       },
@@ -685,7 +685,7 @@ function GetMyEmerdList(datas) {
                       <div data-v-42f27458="" class="tiem">${timerJoin(data.time)}</div>
                   </div>
                   <div data-v-42f27458="" class="money" style="display: ${data.status == 0 ? "none" : ""}">
-                      <span data-v-42f27458="" class="${data.status == 1 ? "success" : "fail"}"> ${data.status == 1 ? "+" : "-"} ${data.status == 1 ? data.get : data.price}.00 </span>
+                      <span data-v-42f27458="" class="${data.status == 1 ? "success" : "fail"}"> ${data.status == 1 ? "+" : "-"} ${data.status == 1 ? data.get : data.price} </span>
                       <!---->
                   </div>
               </div>
@@ -705,7 +705,7 @@ function GetMyEmerdList(datas) {
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
                   <div data-v-42f27458="">Spent Amount</div>
-                  <div data-v-42f27458="">${data.money}.00</div>
+                  <div data-v-42f27458="">${data.money}</div>
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
                   <div data-v-42f27458="">Quantity Purchased</div>
@@ -713,11 +713,11 @@ function GetMyEmerdList(datas) {
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
                   <div data-v-42f27458="">After Tax Amount</div>
-                  <div data-v-42f27458="" class="red">${data.price}.00</div>
+                  <div data-v-42f27458="" class="red">${data.price}</div>
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
                   <div data-v-42f27458="">Tax</div>
-                  <div data-v-42f27458="">${data.fee}.00</div>
+                  <div data-v-42f27458="">${data.fee}</div>
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
                   <div data-v-42f27458="">Opening Price</div>
@@ -745,7 +745,7 @@ function GetMyEmerdList(datas) {
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
                   <div data-v-42f27458="">Win Or Loss</div>
-                  <div data-v-42f27458="" class="${data.status == 1 ? "green" : "red"}" style="display: ${data.status == 0 ? "none" : ""};">${data.status == 1 ? "+" : "-"} ${data.status == 1 ? data.get : data.price}.00</div>
+                  <div data-v-42f27458="" class="${data.status == 1 ? "green" : "red"}" style="display: ${data.status == 0 ? "none" : ""};">${data.status == 1 ? "+" : "-"} ${data.status == 1 ? data.get : data.price}</div>
                   <!---->
               </div>
               <div data-v-42f27458="" class="detailLi c-row c-row-between c-row-middle">
