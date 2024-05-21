@@ -55,7 +55,6 @@ const statistical = async (req, res) => {
    return res.render("manage/statistical.ejs")
 }
 
-
 const rechargePage = async (req, res) => {
    return res.render("manage/recharge.ejs")
 }
@@ -574,6 +573,7 @@ const rechargeDuyet = async (req, res) => {
       await connection.query(`UPDATE recharge SET status = 1 WHERE id = ?`, [id])
 
       const [info] = await connection.query(`SELECT * FROM recharge WHERE id = ?`, [id])
+      const [totalRecharge] = await connection.query(`SELECT * FROM recharge WHERE phone = ? AND status = 1`, [info[0].phone])
 
       const user = await getUserDataByPhone(info?.[0]?.phone)
 
@@ -581,6 +581,7 @@ const rechargeDuyet = async (req, res) => {
          money: info[0].money,
          phone: user.phone,
          invite: user.invite,
+         totalRecharge: totalRecharge.length,
       })
 
       return res.status(200).json({
@@ -618,40 +619,42 @@ const getUserDataByPhone = async phone => {
 
 function getBonuses(amount) {
    const bonusTable = {
-       300: { selfBonus: 60, uplineBonus: 20 },
-       500: { selfBonus: 100, uplineBonus: 30 },
-       1000: { selfBonus: 200, uplineBonus: 50 },
-       3000: { selfBonus: 400, uplineBonus: 100 },
-       5000: { selfBonus: 500, uplineBonus: 150 },
-       10000: { selfBonus: 1000, uplineBonus: 200 },
-       30000: { selfBonus: 2500, uplineBonus: 300 },
-       100000: { selfBonus: 7500, uplineBonus: 1000 }
-   };
+      300: { selfBonus: 60, uplineBonus: 20 },
+      500: { selfBonus: 100, uplineBonus: 30 },
+      1000: { selfBonus: 200, uplineBonus: 50 },
+      3000: { selfBonus: 400, uplineBonus: 100 },
+      5000: { selfBonus: 500, uplineBonus: 150 },
+      10000: { selfBonus: 1000, uplineBonus: 200 },
+      30000: { selfBonus: 2500, uplineBonus: 300 },
+      100000: { selfBonus: 7500, uplineBonus: 1000 },
+   }
 
    if (amount >= 300 && amount < 500) {
-       return bonusTable[300];
+      return bonusTable[300]
    } else if (amount >= 500 && amount < 1000) {
-       return bonusTable[500];
+      return bonusTable[500]
    } else if (amount >= 1000 && amount < 3000) {
-       return bonusTable[1000];
+      return bonusTable[1000]
    } else if (amount >= 3000 && amount < 5000) {
-       return bonusTable[3000];
+      return bonusTable[3000]
    } else if (amount >= 5000 && amount < 10000) {
-       return bonusTable[5000];
+      return bonusTable[5000]
    } else if (amount >= 10000 && amount < 30000) {
-       return bonusTable[10000];
+      return bonusTable[10000]
    } else if (amount >= 30000 && amount < 100000) {
-       return bonusTable[30000];
+      return bonusTable[30000]
    } else if (amount >= 100000) {
-       return bonusTable[100000];
+      return bonusTable[100000]
    }
 }
+// const user_money = money + (money / 100) * 3
+//    const inviter_money = (money / 100) * 2
 
-const addUserAccountBalance = async ({ money, phone, invite }) => {
-   const bonus=getBonuses(money)
-   
-   const user_money = money + bonus.selfBonus;
-   const inviter_money = bonus.uplineBonus;
+const addUserAccountBalance = async ({ money, phone, invite, totalRecharge }) => {
+   const bonus = totalRecharge === 1 ? getBonuses(money) : { selfBonus: (money / 100) * 3, uplineBonus: (money / 100) * 2 }
+
+   const user_money = money + bonus.selfBonus
+   const inviter_money = bonus.uplineBonus
 
    await connection.query("UPDATE users SET money = money + ?, total_money = total_money + ? WHERE `phone` = ?", [user_money, user_money, phone])
 

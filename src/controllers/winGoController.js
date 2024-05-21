@@ -288,6 +288,21 @@ const betWinGo = async (req, res) => {
 
     let result = `
     <div data-v-a9660e98="" issuenumber="${period}" addtime="${formatTime}" rowid="1" class="hb">
+        <div data-v-a9660e98="" class="item c-row">
+            <div data-v-a9660e98="" class="result">
+                <div data-v-a9660e98="" class="select select-${(color)}">
+                    ${checkJoin}
+                </div>
+            </div>
+            <div data-v-a9660e98="" class="c-row c-row-between info">
+                <div data-v-a9660e98="">
+                    <div data-v-a9660e98="" class="issueName">
+                        ${period}
+                    </div>
+                    <div data-v-a9660e98="" class="tiem">${formatTime}</div>
+                </div>
+            </div>
+        </div>
         <!---->
     </div>
     `;

@@ -133,7 +133,8 @@ socket.on("data-server", function (msg) {
                unsetCookie()
                return false
             }
-            $(".num span").text(`₹ ${data.data.money_user}.00`)
+            $(".num span").text(`₹ ${data.data.money_user}`)
+            $(".bonus span").text(`₹ ${data.data.bonus_user} `)
          })
       $(".Loading").fadeOut(0)
    }, 1000)
@@ -181,7 +182,8 @@ fetch("/api/webapi/GetUserInfo")
          unsetCookie()
          return false
       }
-      $(".num span").text(`₹ ${data.data.money_user}.00`)
+      $(".num span").text(`₹ ${data.data.money_user}`)
+      $(".bonus span").text(`₹ ${data.data.bonus_user} `)
    })
 $(".reload_money").click(function (e) {
    e.preventDefault()
@@ -196,7 +198,8 @@ $(".reload_money").click(function (e) {
             unsetCookie()
             return false
          }
-         $(".num span").text(`₹ ${data.data.money_user}.00`)
+         $(".num span").text(`₹ ${data.data.money_user}`)
+         $(".bonus span").text(`₹ ${data.data.bonus_user} `)
       })
 })
 $(".van-overlay, .foot .left").click(function (e) {
@@ -814,7 +817,7 @@ function showListOrder2(list_orders, x) {
                                       </div>
                                       <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                           <div data-v-a9660e98="">Bet Amount</div>
-                                          <div data-v-a9660e98="">${list_orders.money + list_orders.fee}.00</div>
+                                          <div data-v-a9660e98="">${parseFloat(list_orders.money) + parseFloat(list_orders.fee)}</div>
                                       </div>
                                       <div data-v-a9660e98="" class="li c-row c-row-between c-row-middle">
                                           <div data-v-a9660e98="">Quantity</div>
